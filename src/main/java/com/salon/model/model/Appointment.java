@@ -26,8 +26,11 @@ public class Appointment {
     @Column(name = "appointment_time", nullable = false)
     private String appointmentTime;
 
+    // Default constructor
     public Appointment() {
     }
+
+    // Getters and Setters
 
     public Integer getAppointmentId() {
         return appointmentId;

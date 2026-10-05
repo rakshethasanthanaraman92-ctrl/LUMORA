@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>LUMORA | Salon Appointment</title>
 
+    <!-- jsPDF - LOAD ONLY ONCE -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -16,10 +22,20 @@
 
         body {
             min-height: 100vh;
+
             background:
-                    radial-gradient(circle at top left, #42233f 0%, transparent 35%),
-                    radial-gradient(circle at bottom right, #2b1a38 0%, transparent 35%),
+                    radial-gradient(
+                            circle at top left,
+                            #42233f 0%,
+                            transparent 35%
+                    ),
+                    radial-gradient(
+                            circle at bottom right,
+                            #2b1a38 0%,
+                            transparent 35%
+                    ),
                     #100b14;
+
             color: white;
         }
 
@@ -35,14 +51,17 @@
             width: 32%;
             min-height: 100vh;
             padding: 50px 40px;
+
             background:
                     linear-gradient(
                             rgba(32, 17, 32, 0.88),
                             rgba(16, 11, 20, 0.95)
                     ),
                     url("https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1000&q=80");
+
             background-size: cover;
             background-position: center;
+
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -94,7 +113,7 @@
             background: #f4c95d;
         }
 
-        /* RIGHT */
+        /* RIGHT SIDE */
 
         .right {
             width: 68%;
@@ -113,6 +132,7 @@
         }
 
         @keyframes fade {
+
             from {
                 opacity: 0;
                 transform: translateY(10px);
@@ -122,6 +142,7 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+
         }
 
         h2 {
@@ -135,7 +156,7 @@
             margin-bottom: 40px;
         }
 
-        /* INPUTS */
+        /* INPUT */
 
         .form-group {
             margin-bottom: 22px;
@@ -150,10 +171,13 @@
         input {
             width: 100%;
             padding: 17px 18px;
+
             border-radius: 12px;
             border: 1px solid #49344b;
+
             background: #1a111e;
             color: white;
+
             font-size: 16px;
             outline: none;
         }
@@ -172,11 +196,15 @@
 
         .card {
             padding: 28px;
-            border: 1px solid #49344b;
+
+            border: 2px solid #49344b;
             background: #1a111e;
+
             border-radius: 18px;
             cursor: pointer;
-            transition: .25s;
+
+            transition: .2s;
+            user-select: none;
         }
 
         .card:hover {
@@ -187,7 +215,13 @@
         .card.selected {
             background: #f4c95d;
             color: #130e15;
+
             border-color: #f4c95d;
+
+            transform: translateY(-3px);
+
+            box-shadow:
+                    0 8px 25px rgba(244, 201, 93, 0.25);
         }
 
         .card-icon {
@@ -215,7 +249,28 @@
             font-weight: bold;
         }
 
-        /* TIME */
+        /* INFO */
+
+        .selection-info {
+            margin-top: 25px;
+            padding: 20px;
+
+            background: #1a111e;
+            border: 1px solid #49344b;
+
+            border-radius: 15px;
+        }
+
+        .selection-info p {
+            color: #cfc1d0;
+            margin: 7px 0;
+        }
+
+        .selection-info strong {
+            color: #f4c95d;
+        }
+
+        /* TIMES */
 
         .times {
             display: grid;
@@ -225,11 +280,15 @@
 
         .time {
             padding: 18px;
+
             border-radius: 14px;
-            border: 1px solid #49344b;
+            border: 2px solid #49344b;
+
             background: #1a111e;
             color: #ddd0df;
+
             cursor: pointer;
+
             text-align: center;
             font-size: 17px;
         }
@@ -241,7 +300,46 @@
         .time.selected {
             background: #f4c95d;
             color: #120d14;
+
             font-weight: bold;
+
+            border-color: #f4c95d;
+        }
+
+        /* BILL */
+
+        .bill-box {
+            margin-top: 30px;
+
+            padding: 25px;
+
+            border-radius: 18px;
+
+            background: #1a111e;
+            border: 1px solid #f4c95d;
+        }
+
+        .bill-box p {
+            color: #cfc1d0;
+            margin-bottom: 8px;
+        }
+
+        .bill-box h2 {
+            color: #f4c95d;
+            font-size: 30px;
+            margin-top: 15px;
+        }
+
+        .selected-list {
+            margin-top: 18px;
+            padding-top: 15px;
+
+            border-top: 1px solid #49344b;
+        }
+
+        .selected-list div {
+            padding: 7px 0;
+            color: #ddd0df;
         }
 
         /* BUTTONS */
@@ -249,22 +347,30 @@
         .buttons {
             display: flex;
             justify-content: space-between;
+
             margin-top: 40px;
+
             gap: 20px;
+            flex-wrap: wrap;
         }
 
         button {
             border: none;
+
             padding: 17px 30px;
+
             border-radius: 14px;
+
             font-size: 17px;
             font-weight: bold;
+
             cursor: pointer;
         }
 
         .back {
             background: transparent;
             color: white;
+
             border: 1px solid #49344b;
         }
 
@@ -274,44 +380,102 @@
             color: #120d14;
         }
 
-        button:hover {
-            transform: translateY(-2px);
+        /* DOWNLOAD PDF BUTTON */
+
+        .download {
+            background: #f4c95d;
+            color: #120d14;
+            min-width: 230px;
         }
+
+        .download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(244, 201, 93, 0.25);
+        }
+
+        /* ERROR */
 
         .error {
             display: none;
+
             margin-top: 20px;
-            padding: 15px;
+            padding: 18px;
+
             border-radius: 12px;
+
             background: #35151f;
             border: 1px solid #743846;
+
             color: #ff9292;
+
+            white-space: pre-wrap;
+            line-height: 1.5;
         }
+
+        /* SUCCESS */
 
         .success {
             display: none;
+
             padding: 30px;
+
             border-radius: 18px;
+
             background: #18251b;
             border: 1px solid #58745d;
+
             color: #bce8c1;
+
             line-height: 1.8;
         }
 
-        .summary {
+        .booking-item {
+            margin-top: 18px;
+
+            padding: 18px;
+
             background: #1a111e;
+
             border: 1px solid #49344b;
-            border-radius: 18px;
-            padding: 25px;
-            margin-bottom: 25px;
+
+            border-radius: 12px;
         }
 
-        .summary p {
-            margin: 10px 0;
-            color: #cfc1d0;
+        .booking-item p {
+            margin: 8px 0;
         }
+
+        .service-row {
+            padding: 12px 0;
+
+            border-bottom: 1px solid #49344b;
+        }
+
+        .final-total {
+            margin-top: 25px;
+
+            padding-top: 20px;
+
+            border-top: 1px solid #49344b;
+
+            color: #f4c95d;
+
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        /* RECEIPT AREA */
+
+        .receipt-actions {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* MOBILE */
 
         @media(max-width: 900px) {
+
             .app {
                 display: block;
             }
@@ -332,9 +496,17 @@
             .times {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            h2 {
+                font-size: 36px;
+            }
+
         }
+
     </style>
+
 </head>
+
 
 <body>
 
@@ -360,19 +532,22 @@
             </h1>
 
             <p>
-                Discover your perfect look, choose your
-                stylist and reserve your appointment.
+                Discover your perfect look,
+                choose multiple services and
+                stylists, and reserve your
+                appointment.
             </p>
 
         </div>
 
         <div class="dots">
-            <div class="dot active"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
+
+            <div class="dot active" id="dot1"></div>
+            <div class="dot" id="dot2"></div>
+            <div class="dot" id="dot3"></div>
+            <div class="dot" id="dot4"></div>
+            <div class="dot" id="dot5"></div>
+
         </div>
 
     </aside>
@@ -382,206 +557,339 @@
 
     <main class="right">
 
+
         <!-- STEP 1 -->
 
         <section class="step active" id="step1">
 
-            <h2>Welcome to LUMORA</h2>
+            <h2>
+                Welcome to LUMORA
+            </h2>
 
             <p class="subtitle">
                 Enter your details to begin your appointment.
             </p>
 
+
             <div class="form-group">
-                <label>Customer Name</label>
+
+                <label>
+                    Customer Name
+                </label>
 
                 <input
                         type="text"
                         id="customerName"
-                        placeholder="Enter your name"
-                >
+                        placeholder="Enter your name">
+
             </div>
 
+
             <div class="form-group">
-                <label>Phone Number</label>
+
+                <label>
+                    Phone Number
+                </label>
 
                 <input
                         type="tel"
                         id="phone"
-                        placeholder="Enter your phone number"
-                >
+                        maxlength="10"
+                        placeholder="Enter your 10-digit phone number">
+
             </div>
 
+
             <div class="form-group">
-                <label>Email</label>
+
+                <label>
+                    Email
+                </label>
 
                 <input
                         type="email"
                         id="email"
-                        placeholder="Enter your email"
-                >
+                        placeholder="Enter your email">
+
             </div>
 
+
             <div class="error" id="error1"></div>
+
 
             <div class="buttons">
 
                 <div></div>
 
                 <button
+                        type="button"
                         class="next"
-                        onclick="saveCustomerAndNext()"
-                >
+                        onclick="saveCustomerAndNext()">
+
                     Continue →
+
                 </button>
 
             </div>
 
         </section>
+
 
 
         <!-- STEP 2 -->
 
         <section class="step" id="step2">
 
-            <h2>What are you looking for?</h2>
+            <h2>
+                Choose Your Services
+            </h2>
 
             <p class="subtitle">
-                Choose a service from LUMORA.
+                Select one or more services. Click again to remove.
             </p>
 
-            <div class="cards" id="serviceCards"></div>
+
+            <div
+                    class="cards"
+                    id="serviceCards">
+            </div>
+
+
+            <div class="selection-info">
+
+                <p>
+                    Services selected:
+                    <strong id="serviceCount">0</strong>
+                </p>
+
+                <p>
+                    Current total:
+                    <strong>
+                        ₹<span id="serviceTotal">0</span>
+                    </strong>
+                </p>
+
+            </div>
+
 
             <div class="error" id="error2"></div>
+
 
             <div class="buttons">
 
                 <button
+                        type="button"
                         class="back"
-                        onclick="previousStep()"
-                >
+                        onclick="previousStep()">
+
                     ← Back
+
                 </button>
 
+
                 <button
+                        type="button"
                         class="next"
-                        onclick="nextFromService()"
-                >
+                        onclick="nextFromService()">
+
                     Continue →
+
                 </button>
 
             </div>
 
         </section>
+
 
 
         <!-- STEP 3 -->
 
         <section class="step" id="step3">
 
-            <h2>Choose your stylist</h2>
+            <h2>
+                Choose Your Stylists
+            </h2>
 
             <p class="subtitle">
-                Select the professional you prefer.
+                Select one stylist for each selected service.
             </p>
 
-            <div class="cards" id="stylistCards"></div>
+
+            <div
+                    class="cards"
+                    id="stylistCards">
+            </div>
+
+
+            <div class="selection-info">
+
+                <p>
+                    Stylists selected:
+                    <strong id="stylistCount">0</strong>
+                </p>
+
+                <p>
+                    Services selected:
+                    <strong id="serviceCountForStylist">0</strong>
+                </p>
+
+            </div>
+
 
             <div class="error" id="error3"></div>
+
 
             <div class="buttons">
 
                 <button
+                        type="button"
                         class="back"
-                        onclick="previousStep()"
-                >
+                        onclick="previousStep()">
+
                     ← Back
+
                 </button>
 
+
                 <button
+                        type="button"
                         class="next"
-                        onclick="nextFromStylist()"
-                >
+                        onclick="nextFromStylist()">
+
                     Continue →
+
                 </button>
 
             </div>
 
         </section>
+
 
 
         <!-- STEP 4 -->
 
         <section class="step" id="step4">
 
-            <h2>Select a date</h2>
+            <h2>
+                Select a Date
+            </h2>
 
             <p class="subtitle">
                 Choose your appointment date.
             </p>
 
+
             <div class="form-group">
 
-                <label>Appointment Date</label>
+                <label>
+                    Appointment Date
+                </label>
 
                 <input
                         type="date"
-                        id="appointmentDate"
-                >
+                        id="appointmentDate">
 
             </div>
 
+
             <div class="error" id="error4"></div>
+
 
             <div class="buttons">
 
                 <button
+                        type="button"
                         class="back"
-                        onclick="previousStep()"
-                >
+                        onclick="previousStep()">
+
                     ← Back
+
                 </button>
 
+
                 <button
+                        type="button"
                         class="next"
-                        onclick="nextFromDate()"
-                >
+                        onclick="nextFromDate()">
+
                     Continue →
+
                 </button>
 
             </div>
 
         </section>
+
 
 
         <!-- STEP 5 -->
 
         <section class="step" id="step5">
 
-            <h2>Choose your time</h2>
+            <h2>
+                Choose Your Time
+            </h2>
 
             <p class="subtitle">
-                Select an available appointment time.
+                Select your appointment time.
             </p>
 
-            <div class="times" id="timeCards"></div>
+
+            <div
+                    class="times"
+                    id="timeCards">
+            </div>
+
+
+            <div class="bill-box">
+
+                <p>
+                    Selected services:
+                    <strong id="finalServiceCount">0</strong>
+                </p>
+
+                <p>
+                    Selected stylists:
+                    <strong id="finalStylistCount">0</strong>
+                </p>
+
+
+                <div
+                        class="selected-list"
+                        id="finalSelectionList">
+                </div>
+
+
+                <h2>
+                    Total Bill:
+                    ₹<span id="finalTotal">0</span>
+                </h2>
+
+            </div>
+
 
             <div class="error" id="error5"></div>
+
 
             <div class="buttons">
 
                 <button
+                        type="button"
                         class="back"
-                        onclick="previousStep()"
-                >
+                        onclick="previousStep()">
+
                     ← Back
+
                 </button>
 
+
                 <button
+                        type="button"
                         class="confirm"
-                        onclick="confirmBooking()"
-                >
+                        onclick="confirmBooking()">
+
                     Confirm Booking ✓
+
                 </button>
 
             </div>
@@ -589,30 +897,61 @@
         </section>
 
 
-        <!-- SUCCESS -->
+
+        <!-- SUCCESS / CONFIRMATION -->
 
         <section class="step" id="successStep">
 
-            <h2>Booking Confirmed ✨</h2>
+            <h2>
+                Booking Confirmed ✨
+            </h2>
 
             <p class="subtitle">
                 Your LUMORA appointment has been successfully booked.
             </p>
 
-            <div class="success" id="successBox"></div>
+
+            <!-- CONFIRMATION DETAILS -->
+
+            <div
+                    class="success"
+                    id="successBox">
+            </div>
+
+
+            <!-- DOWNLOAD PDF BUTTON -->
+
+            <div class="receipt-actions">
+
+                <button
+                        type="button"
+                        class="download"
+                        onclick="downloadReceipt()">
+
+                    ⬇ Download PDF Receipt
+
+                </button>
+
+            </div>
+
+
+            <!-- BOOK ANOTHER -->
 
             <div class="buttons">
 
                 <button
+                        type="button"
                         class="next"
-                        onclick="location.reload()"
-                >
+                        onclick="location.reload()">
+
                     Book Another Appointment
+
                 </button>
 
             </div>
 
         </section>
+
 
     </main>
 
@@ -622,34 +961,39 @@
 <script>
 
     /*
-    =====================================================
-    BACKEND
-    =====================================================
-    */
+     * SPRING BOOT API
+     */
 
-    const API = "http://localhost:8099/api";
+    const API =
+        "http://localhost:8099/api";
 
 
     /*
-    =====================================================
-    STATE
-    =====================================================
-    */
+     * GLOBAL VARIABLES
+     */
+
+    let currentStep = 1;
 
     let customerId = null;
     let customerName = "";
 
-    let selectedService = null;
-    let selectedStylist = null;
+    let customerPhone = "";
+    let customerEmail = "";
+
+    let selectedServices = [];
+    let selectedStylists = [];
+
     let selectedTime = null;
     let appointmentDate = null;
 
+    let lastBookedAppointments = [];
+
+    let totalBillForReceipt = 0;
+
+
     /*
-    =====================================================
-    SERVICES
-    IDs MATCH MYSQL SERVICES TABLE
-    =====================================================
-    */
+     * SERVICES
+     */
 
     const services = [
 
@@ -681,11 +1025,8 @@
 
 
     /*
-    =====================================================
-    STYLISTS
-    IDs MATCH MYSQL STYLISTS TABLE
-    =====================================================
-    */
+     * STYLISTS
+     */
 
     const stylists = [
 
@@ -717,10 +1058,8 @@
 
 
     /*
-    =====================================================
-    TIMES
-    =====================================================
-    */
+     * AVAILABLE TIMES
+     */
 
     const times = [
 
@@ -750,10 +1089,8 @@
 
 
     /*
-    =====================================================
-    START
-    =====================================================
-    */
+     * PAGE LOAD
+     */
 
     document.addEventListener(
         "DOMContentLoaded",
@@ -767,36 +1104,40 @@
 
             setMinimumDate();
 
+            updateDots();
+
+            updateServiceTotal();
+
+            updateStylistCount();
+
         }
     );
 
 
     /*
-    =====================================================
-    DATE
-    =====================================================
-    */
+     * MINIMUM DATE
+     */
 
     function setMinimumDate() {
 
-        const dateInput =
+        const input =
             document.getElementById(
                 "appointmentDate"
             );
 
         const today =
-            new Date().toISOString().split("T")[0];
+            new Date()
+                .toISOString()
+                .split("T")[0];
 
-        dateInput.min = today;
+        input.min = today;
 
     }
 
 
     /*
-    =====================================================
-    SERVICES
-    =====================================================
-    */
+     * RENDER SERVICES
+     */
 
     function renderServices() {
 
@@ -807,18 +1148,23 @@
 
         container.innerHTML = "";
 
+
         services.forEach(
             function (service) {
 
                 const card =
-                    document.createElement("div");
+                    document.createElement(
+                        "div"
+                    );
 
-                card.className = "card";
+                card.className =
+                    "card";
+
 
                 card.innerHTML = `
 
                     <div class="card-icon">
-                        ✂
+                        ✂️
                     </div>
 
                     <h3>
@@ -830,33 +1176,62 @@
                     </p>
 
                     <div class="price">
-                        ₹${service.price}
+                        ₹${service.price.toLocaleString("en-IN")}
                     </div>
 
                 `;
 
-                card.onclick =
+
+                card.addEventListener(
+                    "click",
                     function () {
 
-                        document
-                            .querySelectorAll(
-                                "#serviceCards .card"
-                            )
-                            .forEach(
-                                c =>
-                                    c.classList.remove(
-                                        "selected"
-                                    )
+                        const index =
+                            selectedServices.findIndex(
+                                function (item) {
+
+                                    return (
+                                        item.serviceId ===
+                                        service.serviceId
+                                    );
+
+                                }
                             );
 
-                        card.classList.add(
-                            "selected"
-                        );
 
-                        selectedService =
-                            service;
+                        if (index >= 0) {
 
-                    };
+                            selectedServices.splice(
+                                index,
+                                1
+                            );
+
+                            card.classList.remove(
+                                "selected"
+                            );
+
+                        } else {
+
+                            selectedServices.push(
+                                service
+                            );
+
+                            card.classList.add(
+                                "selected"
+                            );
+
+                        }
+
+
+                        updateServiceTotal();
+
+                        updateStylistCount();
+
+                        updateFinalSelection();
+
+                    }
+                );
+
 
                 container.appendChild(card);
 
@@ -867,10 +1242,73 @@
 
 
     /*
-    =====================================================
-    STYLISTS
-    =====================================================
-    */
+     * CALCULATE TOTAL
+     */
+
+    function calculateTotal() {
+
+        let total = 0;
+
+
+        selectedServices.forEach(
+            function (service) {
+
+                total += Number(
+                    service.price
+                );
+
+            }
+        );
+
+
+        return total;
+
+    }
+
+
+    /*
+     * UPDATE SERVICE TOTAL
+     */
+
+    function updateServiceTotal() {
+
+        const total =
+            calculateTotal();
+
+
+        document.getElementById(
+            "serviceCount"
+        ).textContent =
+            selectedServices.length;
+
+
+        document.getElementById(
+            "serviceTotal"
+        ).textContent =
+            total.toLocaleString(
+                "en-IN"
+            );
+
+
+        document.getElementById(
+            "finalServiceCount"
+        ).textContent =
+            selectedServices.length;
+
+
+        document.getElementById(
+            "finalTotal"
+        ).textContent =
+            total.toLocaleString(
+                "en-IN"
+            );
+
+    }
+
+
+    /*
+     * RENDER STYLISTS
+     */
 
     function renderStylists() {
 
@@ -881,13 +1319,18 @@
 
         container.innerHTML = "";
 
+
         stylists.forEach(
             function (stylist) {
 
                 const card =
-                    document.createElement("div");
+                    document.createElement(
+                        "div"
+                    );
 
-                card.className = "card";
+                card.className =
+                    "card";
+
 
                 card.innerHTML = `
 
@@ -905,28 +1348,55 @@
 
                 `;
 
-                card.onclick =
+
+                card.addEventListener(
+                    "click",
                     function () {
 
-                        document
-                            .querySelectorAll(
-                                "#stylistCards .card"
-                            )
-                            .forEach(
-                                c =>
-                                    c.classList.remove(
-                                        "selected"
-                                    )
+                        const index =
+                            selectedStylists.findIndex(
+                                function (item) {
+
+                                    return (
+                                        item.stylistId ===
+                                        stylist.stylistId
+                                    );
+
+                                }
                             );
 
-                        card.classList.add(
-                            "selected"
-                        );
 
-                        selectedStylist =
-                            stylist;
+                        if (index >= 0) {
 
-                    };
+                            selectedStylists.splice(
+                                index,
+                                1
+                            );
+
+                            card.classList.remove(
+                                "selected"
+                            );
+
+                        } else {
+
+                            selectedStylists.push(
+                                stylist
+                            );
+
+                            card.classList.add(
+                                "selected"
+                            );
+
+                        }
+
+
+                        updateStylistCount();
+
+                        updateFinalSelection();
+
+                    }
+                );
+
 
                 container.appendChild(card);
 
@@ -937,10 +1407,106 @@
 
 
     /*
-    =====================================================
-    TIMES
-    =====================================================
-    */
+     * UPDATE STYLIST COUNT
+     */
+
+    function updateStylistCount() {
+
+        document.getElementById(
+            "stylistCount"
+        ).textContent =
+            selectedStylists.length;
+
+
+        document.getElementById(
+            "serviceCountForStylist"
+        ).textContent =
+            selectedServices.length;
+
+
+        document.getElementById(
+            "finalStylistCount"
+        ).textContent =
+            selectedStylists.length;
+
+    }
+
+
+    /*
+     * FINAL SERVICE + STYLIST DISPLAY
+     */
+
+    function updateFinalSelection() {
+
+        const container =
+            document.getElementById(
+                "finalSelectionList"
+            );
+
+
+        if (!container) {
+            return;
+        }
+
+
+        container.innerHTML = "";
+
+
+        selectedServices.forEach(
+            function (service, index) {
+
+                const stylist =
+                    selectedStylists[index];
+
+
+                const row =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                row.innerHTML = `
+
+                    <strong>
+                        ${escapeHTML(
+                    service.serviceName
+                )}
+                    </strong>
+
+                    -
+                    ₹${Number(
+                    service.price
+                ).toLocaleString("en-IN")}
+
+                    <br>
+
+                    <small>
+
+                        Stylist:
+                        ${
+                    stylist
+                        ? escapeHTML(
+                            stylist.stylistName
+                        )
+                        : "Not selected"
+                }
+
+                    </small>
+
+                `;
+
+
+                container.appendChild(row);
+
+            }
+        );
+
+    }
+
+
+    /*
+     * RENDER TIMES
+     */
 
     function renderTimes() {
 
@@ -951,6 +1517,7 @@
 
         container.innerHTML = "";
 
+
         times.forEach(
             function (time) {
 
@@ -959,13 +1526,18 @@
                         "button"
                     );
 
-                button.type = "button";
+                button.type =
+                    "button";
 
-                button.className = "time";
+                button.className =
+                    "time";
 
-                button.textContent = time;
+                button.textContent =
+                    time;
 
-                button.onclick =
+
+                button.addEventListener(
+                    "click",
                     function () {
 
                         document
@@ -973,19 +1545,27 @@
                                 ".time"
                             )
                             .forEach(
-                                t =>
-                                    t.classList.remove(
+                                function (item) {
+
+                                    item.classList.remove(
                                         "selected"
-                                    )
+                                    );
+
+                                }
                             );
+
 
                         button.classList.add(
                             "selected"
                         );
 
-                        selectedTime = time;
 
-                    };
+                        selectedTime =
+                            time;
+
+                    }
+                );
+
 
                 container.appendChild(
                     button
@@ -998,149 +1578,275 @@
 
 
     /*
-    =====================================================
-    CUSTOMER
-    =====================================================
-    */
+     * SAVE / UPDATE CUSTOMER
+     */
 
     async function saveCustomerAndNext() {
 
-        const name = document
-            .getElementById("customerName")
-            .value
-            .trim();
+        const name =
+            document.getElementById(
+                "customerName"
+            ).value.trim();
 
-        const phone = document
-            .getElementById("phone")
-            .value
-            .trim();
 
-        const email = document
-            .getElementById("email")
-            .value
-            .trim();
+        const phone =
+            document.getElementById(
+                "phone"
+            ).value.trim();
 
-        const errorBox = document.getElementById("error1");
 
-        errorBox.style.display = "none";
+        const email =
+            document.getElementById(
+                "email"
+            ).value.trim();
 
-        // Validation
+
+        const errorBox =
+            document.getElementById(
+                "error1"
+            );
+
+
+        errorBox.style.display =
+            "none";
+
+
         if (!name) {
-            showError(errorBox, "Please enter your name.");
+
+            showError(
+                errorBox,
+                "Please enter your name."
+            );
+
             return;
+
         }
 
-        if (!phone) {
-            showError(errorBox, "Please enter your phone number.");
+
+        if (!/^[0-9]{10}$/.test(phone)) {
+
+            showError(
+                errorBox,
+                "Please enter a valid 10-digit phone number."
+            );
+
             return;
+
         }
+
+
+        if (!email) {
+
+            showError(
+                errorBox,
+                "Please enter your email."
+            );
+
+            return;
+
+        }
+
 
         try {
 
-            // Get all existing customers
-            const getResponse = await fetch(
-                API + "/customers"
-            );
-
-            if (!getResponse.ok) {
-                throw new Error(
-                    "Unable to load customers. HTTP " +
-                    getResponse.status
+            const response =
+                await fetch(
+                    API + "/customers"
                 );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load customers."
+                );
+
             }
 
-            const customers = await getResponse.json();
 
-            console.log("Customers from database:", customers);
+            const customers =
+                await response.json();
 
-            // Find customer using phone number
-            const existing = customers.find(
-                customer =>
-                    String(customer.phone ?? "").trim() === phone
-            );
 
-            if (existing) {
+            const existing =
+                customers.find(
+                    function (customer) {
 
-                // Existing customer
-                customerId = existing.customerId;
-                customerName = existing.customerName;
+                        return (
+                            String(
+                                customer.phone || ""
+                            ).trim() === phone
+                        );
 
-                console.log(
-                    "Existing customer:",
-                    customerId,
-                    customerName
-                );
-
-            } else {
-
-                // Create NEW customer
-                const createResponse = await fetch(
-                    API + "/customers",
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-
-                        body: JSON.stringify({
-                            customerName: name,
-                            phone: phone,
-                            email: email
-                        })
                     }
                 );
 
-                if (!createResponse.ok) {
 
-                    const message =
-                        await createResponse.text();
+            /*
+             * EXISTING CUSTOMER
+             */
+
+            if (existing) {
+
+                const updateResponse =
+                    await fetch(
+                        API +
+                        "/customers/" +
+                        existing.customerId,
+                        {
+                            method: "PUT",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                customerName:
+                                name,
+
+                                phone:
+                                phone,
+
+                                email:
+                                email
+
+                            })
+                        }
+                    );
+
+
+                if (!updateResponse.ok) {
+
+                    const errorText =
+                        await updateResponse.text();
+
 
                     throw new Error(
-                        message || "Unable to create customer."
+                        errorText ||
+                        "Failed to update customer."
                     );
+
                 }
+
+
+                const updatedCustomer =
+                    await updateResponse.json();
+
+
+                customerId =
+                    updatedCustomer.customerId;
+
+                customerName =
+                    updatedCustomer.customerName ||
+                    name;
+
+                customerPhone =
+                    updatedCustomer.phone ||
+                    phone;
+
+                customerEmail =
+                    updatedCustomer.email ||
+                    email;
+
+            }
+
+
+            /*
+             * NEW CUSTOMER
+             */
+
+            else {
+
+                const createResponse =
+                    await fetch(
+                        API + "/customers",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                customerName:
+                                name,
+
+                                phone:
+                                phone,
+
+                                email:
+                                email
+
+                            })
+                        }
+                    );
+
+
+                if (!createResponse.ok) {
+
+                    const errorText =
+                        await createResponse.text();
+
+
+                    throw new Error(
+                        errorText ||
+                        "Failed to add customer."
+                    );
+
+                }
+
 
                 const newCustomer =
                     await createResponse.json();
+
 
                 customerId =
                     newCustomer.customerId;
 
                 customerName =
-                    newCustomer.customerName || name;
+                    newCustomer.customerName ||
+                    name;
 
-                console.log(
-                    "New customer:",
-                    customerId,
-                    customerName
-                );
+                customerPhone =
+                    newCustomer.phone ||
+                    phone;
+
+                customerEmail =
+                    newCustomer.email ||
+                    email;
+
             }
 
-            // Move to Service page
+
             nextStep();
 
-        } catch (err) {
+
+        } catch (error) {
 
             console.error(
                 "CUSTOMER ERROR:",
-                err
+                error
             );
+
 
             showError(
                 errorBox,
-                err.message ||
+                error.message ||
                 "Unable to save customer."
             );
+
         }
+
     }
 
 
     /*
-    =====================================================
-    SERVICE NEXT
-    =====================================================
-    */
+     * SERVICE NEXT
+     */
 
     function nextFromService() {
 
@@ -1149,15 +1855,24 @@
                 "error2"
             );
 
-        if (!selectedService) {
+
+        error.style.display =
+            "none";
+
+
+        if (
+            selectedServices.length === 0
+        ) {
 
             showError(
                 error,
-                "Please select a service."
+                "Please select at least one service."
             );
 
             return;
+
         }
+
 
         nextStep();
 
@@ -1165,10 +1880,8 @@
 
 
     /*
-    =====================================================
-    STYLIST NEXT
-    =====================================================
-    */
+     * STYLIST NEXT
+     */
 
     function nextFromStylist() {
 
@@ -1177,15 +1890,48 @@
                 "error3"
             );
 
-        if (!selectedStylist) {
+
+        error.style.display =
+            "none";
+
+
+        if (
+            selectedStylists.length === 0
+        ) {
 
             showError(
                 error,
-                "Please select a stylist."
+                "Please select at least one stylist."
             );
 
             return;
+
         }
+
+
+        if (
+            selectedStylists.length !==
+            selectedServices.length
+        ) {
+
+            showError(
+                error,
+
+                "Please select the same number of stylists and services.\n\n" +
+
+                "Example:\n" +
+
+                "2 services → select 2 stylists\n" +
+
+                "3 services → select 3 stylists"
+            );
+
+            return;
+
+        }
+
+
+        updateFinalSelection();
 
         nextStep();
 
@@ -1193,10 +1939,8 @@
 
 
     /*
-    =====================================================
-    DATE NEXT
-    =====================================================
-    */
+     * DATE
+     */
 
     function nextFromDate() {
 
@@ -1205,12 +1949,16 @@
                 "error4"
             );
 
+
+        error.style.display =
+            "none";
+
+
         appointmentDate =
-            document
-                .getElementById(
-                    "appointmentDate"
-                )
-                .value;
+            document.getElementById(
+                "appointmentDate"
+            ).value;
+
 
         if (!appointmentDate) {
 
@@ -1220,7 +1968,9 @@
             );
 
             return;
+
         }
+
 
         nextStep();
 
@@ -1228,10 +1978,160 @@
 
 
     /*
-    =====================================================
-    TIME TO SQL FORMAT
-    =====================================================
-    */
+     * NEXT STEP
+     */
+
+    function nextStep() {
+
+        if (currentStep >= 5) {
+            return;
+        }
+
+
+        document
+            .querySelectorAll(".step")
+            .forEach(
+                function (step) {
+
+                    step.classList.remove(
+                        "active"
+                    );
+
+                }
+            );
+
+
+        currentStep++;
+
+
+        const next =
+            document.getElementById(
+                "step" + currentStep
+            );
+
+
+        if (next) {
+
+            next.classList.add(
+                "active"
+            );
+
+        }
+
+
+        updateDots();
+
+
+        window.scrollTo(
+            0,
+            0
+        );
+
+    }
+
+
+    /*
+     * PREVIOUS STEP
+     */
+
+    function previousStep() {
+
+        if (currentStep <= 1) {
+            return;
+        }
+
+
+        document
+            .querySelectorAll(".step")
+            .forEach(
+                function (step) {
+
+                    step.classList.remove(
+                        "active"
+                    );
+
+                }
+            );
+
+
+        currentStep--;
+
+
+        const previous =
+            document.getElementById(
+                "step" + currentStep
+            );
+
+
+        if (previous) {
+
+            previous.classList.add(
+                "active"
+            );
+
+        }
+
+
+        updateDots();
+
+
+        window.scrollTo(
+            0,
+            0
+        );
+
+    }
+
+
+    /*
+     * UPDATE DOTS
+     */
+
+    function updateDots() {
+
+        for (
+            let i = 1;
+            i <= 5;
+            i++
+        ) {
+
+            const dot =
+                document.getElementById(
+                    "dot" + i
+                );
+
+
+            if (dot) {
+
+                dot.classList.remove(
+                    "active"
+                );
+
+            }
+
+        }
+
+
+        const activeDot =
+            document.getElementById(
+                "dot" + currentStep
+            );
+
+
+        if (activeDot) {
+
+            activeDot.classList.add(
+                "active"
+            );
+
+        }
+
+    }
+
+
+    /*
+     * TIME CONVERSION
+     */
 
     function convertTimeToSQL(time) {
 
@@ -1244,101 +2144,124 @@
         const period =
             parts[1];
 
-        let [hour, minute] =
-            hm.split(":")
-                .map(Number);
+        const values =
+            hm.split(":");
+
+        let hour =
+            Number(values[0]);
+
+        const minute =
+            Number(values[1]);
 
 
-        if (period === "PM" &&
-            hour !== 12) {
+        if (
+            period === "PM" &&
+            hour !== 12
+        ) {
 
             hour += 12;
+
         }
 
 
-        if (period === "AM" &&
-            hour === 12) {
+        if (
+            period === "AM" &&
+            hour === 12
+        ) {
 
             hour = 0;
+
         }
 
 
-        return String(hour).padStart(2, "0")
-            + ":" +
-            String(minute).padStart(2, "0")
-            + ":00";
+        return (
+            String(hour).padStart(2, "0") +
+            ":" +
+            String(minute).padStart(2, "0") +
+            ":00"
+        );
 
     }
 
 
     /*
-    =====================================================
-    CONFIRM BOOKING
-    =====================================================
-    */
+     * CONFIRM BOOKING
+     */
 
     async function confirmBooking() {
 
-        const error =
+        const errorBox =
             document.getElementById(
                 "error5"
             );
 
-        error.style.display = "none";
+
+        errorBox.style.display =
+            "none";
 
 
         if (!customerId) {
 
             showError(
-                error,
+                errorBox,
                 "Customer details are missing."
             );
 
             return;
+
         }
 
 
-        if (!selectedService) {
+        if (
+            selectedServices.length === 0
+        ) {
 
             showError(
-                error,
-                "Please select a service."
+                errorBox,
+                "Please select at least one service."
             );
 
             return;
+
         }
 
 
-        if (!selectedStylist) {
+        if (
+            selectedStylists.length !==
+            selectedServices.length
+        ) {
 
             showError(
-                error,
-                "Please select a stylist."
+                errorBox,
+                "Please select the same number of stylists and services."
             );
 
             return;
+
         }
 
 
         if (!appointmentDate) {
 
             showError(
-                error,
+                errorBox,
                 "Please select a date."
             );
 
             return;
+
         }
 
 
         if (!selectedTime) {
 
             showError(
-                error,
+                errorBox,
                 "Please select a time."
             );
 
             return;
+
         }
 
 
@@ -1348,96 +2271,193 @@
             );
 
 
-        /*
-         * EXACT DATA SENT TO SPRING BOOT
-         */
-
-        const appointment = {
-
-            customerId:
-                Number(customerId),
-
-            stylistId:
-                Number(
-                    selectedStylist.stylistId
-                ),
-
-            serviceId:
-                Number(
-                    selectedService.serviceId
-                ),
-
-            appointmentDate:
-            appointmentDate,
-
-            appointmentTime:
-            appointmentTime
-
-        };
+        const totalBill =
+            calculateTotal();
 
 
-        console.log(
-            "Sending appointment:",
-            appointment
-        );
+        totalBillForReceipt =
+            totalBill;
+
+
+        lastBookedAppointments =
+            [];
+
+
+        const bookedAppointments =
+            [];
 
 
         try {
 
-            const response =
-                await fetch(
-                    API + "/appointments",
-                    {
+            /*
+             * ONE DATABASE ROW
+             * FOR EACH SERVICE + STYLIST
+             */
 
-                        method: "POST",
+            for (
+                let i = 0;
+                i < selectedServices.length;
+                i++
+            ) {
 
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
+                const service =
+                    selectedServices[i];
 
-                        body:
-                            JSON.stringify(
-                                appointment
-                            )
 
-                    }
+                const stylist =
+                    selectedStylists[i];
+
+
+                const appointment = {
+
+                    customerId:
+                        Number(customerId),
+
+                    stylistId:
+                        Number(
+                            stylist.stylistId
+                        ),
+
+                    serviceId:
+                        Number(
+                            service.serviceId
+                        ),
+
+                    appointmentDate:
+                    appointmentDate,
+
+                    appointmentTime:
+                    appointmentTime
+
+                };
+
+
+                console.log(
+                    "Sending appointment:",
+                    appointment
                 );
 
 
-            if (!response.ok) {
+                const response =
+                    await fetch(
+                        API +
+                        "/appointments",
+                        {
+                            method: "POST",
 
-                const message =
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    appointment
+                                )
+                        }
+                    );
+
+
+                const responseText =
                     await response.text();
 
-                throw new Error(
-                    message ||
-                    "Unable to create appointment."
+
+                /*
+                 * DOUBLE BOOKING
+                 */
+
+                if (!response.ok) {
+
+                    const message =
+                        responseText.toLowerCase();
+
+
+                    if (
+                        response.status === 409 ||
+                        message.includes("duplicate") ||
+                        message.includes("already") ||
+                        message.includes("booked")
+                    ) {
+
+                        showError(
+                            errorBox,
+
+                            "😔 This stylist is already booked at this time.\n\n" +
+                            "Please choose another time."
+                        );
+
+                        return;
+
+                    }
+
+
+                    showError(
+                        errorBox,
+
+                        "Booking failed.\n\n" +
+                        responseText
+                    );
+
+                    return;
+
+                }
+
+
+                let savedAppointment =
+                    null;
+
+
+                if (responseText) {
+
+                    try {
+
+                        savedAppointment =
+                            JSON.parse(
+                                responseText
+                            );
+
+                    } catch (e) {
+
+                        savedAppointment =
+                            null;
+
+                    }
+
+                }
+
+
+                bookedAppointments.push(
+                    savedAppointment
                 );
+
+
+                lastBookedAppointments.push(
+                    savedAppointment
+                );
+
             }
 
 
-            const savedAppointment =
-                await response.json();
-
-
             showSuccess(
-                savedAppointment
+                bookedAppointments,
+                totalBill
             );
 
-        }
 
-        catch (error) {
+        } catch (error) {
 
             console.error(
                 "BOOKING ERROR:",
                 error
             );
 
+
             showError(
-                error,
-                error.message ||
-                "Failed to create appointment."
+                errorBox,
+
+                "Unable to connect to Spring Boot.\n\n" +
+                "Make sure your backend is running on:\n" +
+                "http://localhost:8099"
             );
 
         }
@@ -1446,162 +2466,773 @@
 
 
     /*
-    =====================================================
-    SUCCESS
-    =====================================================
-    */
+     * SUCCESS / CONFIRMATION
+     */
 
-    function showSuccess(appointment) {
+    function showSuccess(
+        appointments,
+        totalBill
+    ) {
 
         document
             .querySelectorAll(".step")
-            .forEach(step => {
-                step.classList.remove("active");
-            });
+            .forEach(
+                function (step) {
+
+                    step.classList.remove(
+                        "active"
+                    );
+
+                }
+            );
+
 
         document
-            .getElementById("successStep")
-            .classList.add("active");
+            .getElementById(
+                "successStep"
+            )
+            .classList.add(
+            "active"
+        );
+
 
         const box =
-            document.getElementById("successBox");
+            document.getElementById(
+                "successBox"
+            );
 
-        box.style.display = "block";
+
+        box.style.display =
+            "block";
+
+
+        let appointmentIds =
+            "Saved";
+
+
+        if (
+            appointments &&
+            appointments.length > 0
+        ) {
+
+            appointmentIds =
+                appointments
+                    .map(
+                        function (
+                            appointment
+                        ) {
+
+                            if (
+                                appointment &&
+                                appointment.appointmentId
+                            ) {
+
+                                return (
+                                    appointment.appointmentId
+                                );
+
+                            }
+
+
+                            return "Saved";
+
+                        }
+                    )
+                    .join(", ");
+
+        }
+
+
+        let serviceHTML = "";
+
+
+        selectedServices.forEach(
+            function (
+                service,
+                index
+            ) {
+
+                const stylist =
+                    selectedStylists[index];
+
+
+                serviceHTML += `
+
+                    <div class="service-row">
+
+                        <strong>
+                            ${escapeHTML(
+                    service.serviceName
+                )}
+                        </strong>
+
+                        -
+                        ₹${Number(
+                    service.price
+                ).toLocaleString("en-IN")}
+
+                        <br>
+
+                        <small>
+
+                            Stylist:
+                            ${
+                    stylist
+                        ? escapeHTML(
+                            stylist.stylistName
+                        )
+                        : "Not selected"
+                }
+
+                        </small>
+
+                    </div>
+
+                `;
+
+            }
+        );
+
 
         box.innerHTML = `
 
-        <p>
-            <strong>
-                Customer:
-            </strong>
-            ${escapeHTML(customerName)}
-        </p>
+            <div class="booking-item">
 
-        <p>
-            <strong>
-                Customer ID:
-            </strong>
-            ${customerId}
-        </p>
+                <p>
+                    <strong>
+                        Customer:
+                    </strong>
 
-        <p>
-            <strong>
-                Service:
-            </strong>
-            ${escapeHTML(
-            selectedService.serviceName
+                    ${escapeHTML(
+            customerName
         )}
-        </p>
+                </p>
 
-        <p>
-            <strong>
-                Stylist:
-            </strong>
-            ${escapeHTML(
-            selectedStylist.stylistName
+
+                <p>
+                    <strong>
+                        Customer ID:
+                    </strong>
+
+                    ${customerId}
+                </p>
+
+
+                <p>
+                    <strong>
+                        Phone:
+                    </strong>
+
+                    ${escapeHTML(
+            customerPhone
         )}
-        </p>
+                </p>
 
-        <p>
-            <strong>
-                Date:
-            </strong>
-            ${appointmentDate}
-        </p>
 
-        <p>
-            <strong>
-                Time:
-            </strong>
-            ${selectedTime}
-        </p>
+                <p>
+                    <strong>
+                        Email:
+                    </strong>
 
-        <p>
-            <strong>
-                Amount:
-            </strong>
-            ₹${Number(
-            selectedService.price
+                    ${escapeHTML(
+            customerEmail
+        )}
+                </p>
+
+
+                <p>
+                    <strong>
+                        Services & Stylists:
+                    </strong>
+                </p>
+
+
+                ${serviceHTML}
+
+
+                <p>
+                    <strong>
+                        Date:
+                    </strong>
+
+                    ${appointmentDate}
+                </p>
+
+
+                <p>
+                    <strong>
+                        Time:
+                    </strong>
+
+                    ${selectedTime}
+                </p>
+
+
+                <p>
+                    <strong>
+                        Appointment ID:
+                    </strong>
+
+                    ${appointmentIds}
+                </p>
+
+            </div>
+
+
+            <div class="final-total">
+
+                Total Bill:
+                ₹${Number(
+            totalBill
         ).toLocaleString("en-IN")}
-        </p>
 
-        <p>
-            <strong>
-                Appointment ID:
-            </strong>
-            ${appointment.appointmentId || "Saved"}
-        </p>
+            </div>
+
+        `;
 
 
-    }
-
-    /*
-    =====================================================
-    NAVIGATION
-    =====================================================
-    */
-
-    function nextStep() {
-
-        document
-            .getElementById(
-                "step" + currentStep
-            )
-            .classList.remove(
-            "active"
-        );
-
-        currentStep++;
-
-        document
-            .getElementById(
-                "step" + currentStep
-            )
-            .classList.add(
-            "active"
-        );
-
-        window.scrollTo(
-            0,
-            0
-        );
-
-    }
-
-
-    function previousStep() {
-
-        document
-            .getElementById(
-                "step" + currentStep
-            )
-            .classList.remove(
-            "active"
-        );
-
-        currentStep--;
-
-        document
-            .getElementById(
-                "step" + currentStep
-            )
-            .classList.add(
-            "active"
-        );
-
-        window.scrollTo(
-            0,
-            0
-        );
+        currentStep = 5;
 
     }
 
 
     /*
-    =====================================================
-    ERROR
-    =====================================================
-    */
+     * DOWNLOAD PDF RECEIPT
+     *
+     * This downloads the
+     * confirmation details
+     * as a PDF.
+     */
+
+    function downloadReceipt() {
+
+        try {
+
+            /*
+             * CHECK jsPDF
+             */
+
+            if (
+                typeof window.jspdf ===
+                "undefined"
+            ) {
+
+                alert(
+                    "PDF library could not be loaded.\n\n" +
+                    "Please check your internet connection and refresh the page."
+                );
+
+                return;
+
+            }
+
+
+            const {
+                jsPDF
+            } = window.jspdf;
+
+
+            const doc =
+                new jsPDF();
+
+
+            const pageWidth =
+                doc.internal.pageSize.getWidth();
+
+
+            let y = 20;
+
+
+            /*
+             * LUMORA HEADER
+             */
+
+            doc.setFont(
+                "helvetica",
+                "bold"
+            );
+
+            doc.setFontSize(25);
+
+            doc.text(
+                "LUMORA",
+                pageWidth / 2,
+                y,
+                {
+                    align: "center"
+                }
+            );
+
+
+            y += 8;
+
+
+            doc.setFont(
+                "helvetica",
+                "normal"
+            );
+
+            doc.setFontSize(10);
+
+
+            doc.text(
+                "SALON & BEAUTY",
+                pageWidth / 2,
+                y,
+                {
+                    align: "center"
+                }
+            );
+
+
+            y += 12;
+
+
+            doc.setFont(
+                "helvetica",
+                "bold"
+            );
+
+            doc.setFontSize(17);
+
+
+            doc.text(
+                "APPOINTMENT RECEIPT",
+                pageWidth / 2,
+                y,
+                {
+                    align: "center"
+                }
+            );
+
+
+            y += 10;
+
+
+            doc.line(
+                20,
+                y,
+                pageWidth - 20,
+                y
+            );
+
+
+            y += 12;
+
+
+            /*
+             * CUSTOMER DETAILS
+             */
+
+            doc.setFont(
+                "helvetica",
+                "bold"
+            );
+
+            doc.setFontSize(12);
+
+
+            doc.text(
+                "CUSTOMER DETAILS",
+                20,
+                y
+            );
+
+
+            y += 8;
+
+
+            doc.setFont(
+                "helvetica",
+                "normal"
+            );
+
+            doc.setFontSize(11);
+
+
+            doc.text(
+                "Customer Name: " +
+                customerName,
+                20,
+                y
+            );
+
+
+            y += 7;
+
+
+            doc.text(
+                "Customer ID: " +
+                customerId,
+                20,
+                y
+            );
+
+
+            y += 7;
+
+
+            doc.text(
+                "Phone: " +
+                customerPhone,
+                20,
+                y
+            );
+
+
+            y += 7;
+
+
+            doc.text(
+                "Email: " +
+                customerEmail,
+                20,
+                y
+            );
+
+
+            y += 12;
+
+
+            /*
+             * APPOINTMENT DETAILS
+             */
+
+            doc.setFont(
+                "helvetica",
+                "bold"
+            );
+
+            doc.setFontSize(12);
+
+
+            doc.text(
+                "APPOINTMENT DETAILS",
+                20,
+                y
+            );
+
+
+            y += 8;
+
+
+            doc.setFont(
+                "helvetica",
+                "normal"
+            );
+
+            doc.setFontSize(11);
+
+
+            doc.text(
+                "Date: " +
+                appointmentDate,
+                20,
+                y
+            );
+
+
+            y += 7;
+
+
+            doc.text(
+                "Time: " +
+                selectedTime,
+                20,
+                y
+            );
+
+
+            y += 7;
+
+
+            const appointmentIds =
+                lastBookedAppointments
+                    .map(
+                        function (
+                            appointment
+                        ) {
+
+                            return (
+                                appointment &&
+                                appointment.appointmentId
+                            )
+                                ? appointment.appointmentId
+                                : "Saved";
+
+                        }
+                    )
+                    .join(", ");
+
+
+            doc.text(
+                "Appointment ID: " +
+                appointmentIds,
+                20,
+                y
+            );
+
+
+            y += 12;
+
+
+            /*
+             * SERVICES
+             */
+
+            doc.setFont(
+                "helvetica",
+                "bold"
+            );
+
+            doc.setFontSize(12);
+
+
+            doc.text(
+                "SERVICES & STYLISTS",
+                20,
+                y
+            );
+
+
+            y += 9;
+
+
+            doc.setFontSize(10);
+
+
+            doc.setFont(
+                "helvetica",
+                "bold"
+            );
+
+
+            doc.text(
+                "Service",
+                20,
+                y
+            );
+
+
+            doc.text(
+                "Stylist",
+                105,
+                y
+            );
+
+
+            doc.text(
+                "Price",
+                165,
+                y
+            );
+
+
+            y += 5;
+
+
+            doc.line(
+                20,
+                y,
+                pageWidth - 20,
+                y
+            );
+
+
+            y += 8;
+
+
+            /*
+             * SERVICE ROWS
+             */
+
+            doc.setFont(
+                "helvetica",
+                "normal"
+            );
+
+
+            selectedServices.forEach(
+                function (
+                    service,
+                    index
+                ) {
+
+                    const stylist =
+                        selectedStylists[index];
+
+
+                    doc.text(
+                        String(
+                            service.serviceName
+                        ),
+                        20,
+                        y
+                    );
+
+
+                    doc.text(
+                        stylist
+                            ? String(
+                                stylist.stylistName
+                            )
+                            : "-",
+                        105,
+                        y
+                    );
+
+
+                    doc.text(
+                        "Rs. " +
+                        Number(
+                            service.price
+                        ).toLocaleString(
+                            "en-IN"
+                        ),
+                        165,
+                        y
+                    );
+
+
+                    y += 9;
+
+                }
+            );
+
+
+            y += 3;
+
+
+            doc.line(
+                20,
+                y,
+                pageWidth - 20,
+                y
+            );
+
+
+            y += 12;
+
+
+            /*
+             * TOTAL
+             */
+
+            doc.setFont(
+                "helvetica",
+                "bold"
+            );
+
+            doc.setFontSize(16);
+
+
+            doc.text(
+                "TOTAL BILL",
+                20,
+                y
+            );
+
+
+            doc.text(
+                "Rs. " +
+                Number(
+                    totalBillForReceipt
+                ).toLocaleString(
+                    "en-IN"
+                ),
+                165,
+                y
+            );
+
+
+            y += 18;
+
+
+            /*
+             * FOOTER
+             */
+
+            doc.setFont(
+                "helvetica",
+                "normal"
+            );
+
+            doc.setFontSize(10);
+
+
+            doc.text(
+                "Thank you for choosing LUMORA.",
+                pageWidth / 2,
+                y,
+                {
+                    align: "center"
+                }
+            );
+
+
+            y += 6;
+
+
+            doc.text(
+                "We look forward to seeing you again!",
+                pageWidth / 2,
+                y,
+                {
+                    align: "center"
+                }
+            );
+
+
+            /*
+             * FILE NAME
+             */
+
+            const safeName =
+                customerName
+                    .replace(
+                        /[^a-zA-Z0-9]/g,
+                        "_"
+                    );
+
+
+            const safeDate =
+                appointmentDate ||
+                "appointment";
+
+
+            /*
+             * DOWNLOAD
+             */
+
+            doc.save(
+                "LUMORA_Receipt_" +
+                safeName +
+                "_" +
+                safeDate +
+                ".pdf"
+            );
+
+        } catch (error) {
+
+            console.error(
+                "PDF ERROR:",
+                error
+            );
+
+
+            alert(
+                "Unable to create PDF receipt.\n\n" +
+                error.message
+            );
+
+        }
+
+    }
+
+
+    /*
+     * SHOW ERROR
+     */
 
     function showError(
         element,
@@ -1616,7 +3247,29 @@
 
     }
 
+
+    /*
+     * HTML SECURITY
+     */
+
+    function escapeHTML(value) {
+
+        const div =
+            document.createElement(
+                "div"
+            );
+
+
+        div.textContent =
+            value ?? "";
+
+
+        return div.innerHTML;
+
+    }
+
 </script>
 
 </body>
+
 </html>
