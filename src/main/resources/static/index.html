@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LUMORA | Salon Appointment</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                    radial-gradient(circle at top left, #42233f 0%, transparent 35%),
+                    radial-gradient(circle at bottom right, #2b1a38 0%, transparent 35%),
+                    #100b14;
+            color: white;
+        }
+
+        .app {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* LEFT SIDE */
+
+        .left {
+            width: 32%;
+            min-height: 100vh;
+            padding: 50px 40px;
+            background:
+                    linear-gradient(
+                            rgba(32, 17, 32, 0.88),
+                            rgba(16, 11, 20, 0.95)
+                    ),
+                    url("https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1000&q=80");
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 28px;
+            letter-spacing: 8px;
+            color: #f4c95d;
+            font-weight: bold;
+        }
+
+        .tagline {
+            max-width: 350px;
+        }
+
+        .small {
+            color: #f4c95d;
+            letter-spacing: 5px;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .tagline h1 {
+            font-size: clamp(40px, 5vw, 70px);
+            line-height: .95;
+            margin-bottom: 25px;
+        }
+
+        .tagline p {
+            color: #c8bccb;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        .dots {
+            display: flex;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 40px;
+            height: 5px;
+            border-radius: 5px;
+            background: #4a394b;
+        }
+
+        .dot.active {
+            background: #f4c95d;
+        }
+
+        /* RIGHT */
+
+        .right {
+            width: 68%;
+            padding: 55px 7%;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .step {
+            display: none;
+            animation: fade .3s ease;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            font-size: 46px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #a99fac;
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+
+        /* INPUTS */
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            color: #d7cad8;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 17px 18px;
+            border-radius: 12px;
+            border: 1px solid #49344b;
+            background: #1a111e;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #f4c95d;
+        }
+
+        /* CARDS */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .card {
+            padding: 28px;
+            border: 1px solid #49344b;
+            background: #1a111e;
+            border-radius: 18px;
+            cursor: pointer;
+            transition: .25s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: #f4c95d;
+        }
+
+        .card.selected {
+            background: #f4c95d;
+            color: #130e15;
+            border-color: #f4c95d;
+        }
+
+        .card-icon {
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #a99fac;
+            line-height: 1.5;
+        }
+
+        .card.selected p {
+            color: #3d303d;
+        }
+
+        .price {
+            margin-top: 18px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* TIME */
+
+        .times {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .time {
+            padding: 18px;
+            border-radius: 14px;
+            border: 1px solid #49344b;
+            background: #1a111e;
+            color: #ddd0df;
+            cursor: pointer;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        .time:hover {
+            border-color: #f4c95d;
+        }
+
+        .time.selected {
+            background: #f4c95d;
+            color: #120d14;
+            font-weight: bold;
+        }
+
+        /* BUTTONS */
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 20px;
+        }
+
+        button {
+            border: none;
+            padding: 17px 30px;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .back {
+            background: transparent;
+            color: white;
+            border: 1px solid #49344b;
+        }
+
+        .next,
+        .confirm {
+            background: #f4c95d;
+            color: #120d14;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        .error {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            background: #35151f;
+            border: 1px solid #743846;
+            color: #ff9292;
+        }
+
+        .success {
+            display: none;
+            padding: 30px;
+            border-radius: 18px;
+            background: #18251b;
+            border: 1px solid #58745d;
+            color: #bce8c1;
+            line-height: 1.8;
+        }
+
+        .summary {
+            background: #1a111e;
+            border: 1px solid #49344b;
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .summary p {
+            margin: 10px 0;
+            color: #cfc1d0;
+        }
+
+        @media(max-width: 900px) {
+            .app {
+                display: block;
+            }
+
+            .left,
+            .right {
+                width: 100%;
+            }
+
+            .left {
+                min-height: 400px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .times {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- LEFT SIDE -->
+
+    <aside class="left">
+
+        <div class="logo">
+            LUMORA
+        </div>
+
+        <div class="tagline">
+
+            <div class="small">
+                SALON & BEAUTY
+            </div>
+
+            <h1>
+                Your Style.<br>
+                Your Moment.
+            </h1>
+
+            <p>
+                Discover your perfect look, choose your
+                stylist and reserve your appointment.
+            </p>
+
+        </div>
+
+        <div class="dots">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+
+    </aside>
+
+
+    <!-- RIGHT SIDE -->
+
+    <main class="right">
+
+        <!-- STEP 1 -->
+
+        <section class="step active" id="step1">
+
+            <h2>Welcome to LUMORA</h2>
+
+            <p class="subtitle">
+                Enter your details to begin your appointment.
+            </p>
+
+            <div class="form-group">
+                <label>Customer Name</label>
+
+                <input
+                        type="text"
+                        id="customerName"
+                        placeholder="Enter your name"
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Phone Number</label>
+
+                <input
+                        type="tel"
+                        id="phone"
+                        placeholder="Enter your phone number"
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+
+                <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                >
+            </div>
+
+            <div class="error" id="error1"></div>
+
+            <div class="buttons">
+
+                <div></div>
+
+                <button
+                        class="next"
+                        onclick="saveCustomerAndNext()"
+                >
+                    Continue →
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- STEP 2 -->
+
+        <section class="step" id="step2">
+
+            <h2>What are you looking for?</h2>
+
+            <p class="subtitle">
+                Choose a service from LUMORA.
+            </p>
+
+            <div class="cards" id="serviceCards"></div>
+
+            <div class="error" id="error2"></div>
+
+            <div class="buttons">
+
+                <button
+                        class="back"
+                        onclick="previousStep()"
+                >
+                    ← Back
+                </button>
+
+                <button
+                        class="next"
+                        onclick="nextFromService()"
+                >
+                    Continue →
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- STEP 3 -->
+
+        <section class="step" id="step3">
+
+            <h2>Choose your stylist</h2>
+
+            <p class="subtitle">
+                Select the professional you prefer.
+            </p>
+
+            <div class="cards" id="stylistCards"></div>
+
+            <div class="error" id="error3"></div>
+
+            <div class="buttons">
+
+                <button
+                        class="back"
+                        onclick="previousStep()"
+                >
+                    ← Back
+                </button>
+
+                <button
+                        class="next"
+                        onclick="nextFromStylist()"
+                >
+                    Continue →
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- STEP 4 -->
+
+        <section class="step" id="step4">
+
+            <h2>Select a date</h2>
+
+            <p class="subtitle">
+                Choose your appointment date.
+            </p>
+
+            <div class="form-group">
+
+                <label>Appointment Date</label>
+
+                <input
+                        type="date"
+                        id="appointmentDate"
+                >
+
+            </div>
+
+            <div class="error" id="error4"></div>
+
+            <div class="buttons">
+
+                <button
+                        class="back"
+                        onclick="previousStep()"
+                >
+                    ← Back
+                </button>
+
+                <button
+                        class="next"
+                        onclick="nextFromDate()"
+                >
+                    Continue →
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- STEP 5 -->
+
+        <section class="step" id="step5">
+
+            <h2>Choose your time</h2>
+
+            <p class="subtitle">
+                Select an available appointment time.
+            </p>
+
+            <div class="times" id="timeCards"></div>
+
+            <div class="error" id="error5"></div>
+
+            <div class="buttons">
+
+                <button
+                        class="back"
+                        onclick="previousStep()"
+                >
+                    ← Back
+                </button>
+
+                <button
+                        class="confirm"
+                        onclick="confirmBooking()"
+                >
+                    Confirm Booking ✓
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- SUCCESS -->
+
+        <section class="step" id="successStep">
+
+            <h2>Booking Confirmed ✨</h2>
+
+            <p class="subtitle">
+                Your LUMORA appointment has been successfully booked.
+            </p>
+
+            <div class="success" id="successBox"></div>
+
+            <div class="buttons">
+
+                <button
+                        class="next"
+                        onclick="location.reload()"
+                >
+                    Book Another Appointment
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    /*
+    =====================================================
+    BACKEND
+    =====================================================
+    */
+
+    const API = "http://localhost:8099/api";
+
+
+    /*
+    =====================================================
+    STATE
+    =====================================================
+    */
+
+    let customerId = null;
+    let customerName = "";
+
+    let selectedService = null;
+    let selectedStylist = null;
+    let selectedTime = null;
+    let appointmentDate = null;
+
+    /*
+    =====================================================
+    SERVICES
+    IDs MATCH MYSQL SERVICES TABLE
+    =====================================================
+    */
+
+    const services = [
+
+        {
+            serviceId: 1,
+            serviceName: "Hair Cut",
+            price: 300
+        },
+
+        {
+            serviceId: 2,
+            serviceName: "Hair Coloring",
+            price: 1200
+        },
+
+        {
+            serviceId: 3,
+            serviceName: "Facial",
+            price: 800
+        },
+
+        {
+            serviceId: 4,
+            serviceName: "Bridal Makeup",
+            price: 5000
+        }
+
+    ];
+
+
+    /*
+    =====================================================
+    STYLISTS
+    IDs MATCH MYSQL STYLISTS TABLE
+    =====================================================
+    */
+
+    const stylists = [
+
+        {
+            stylistId: 1,
+            stylistName: "Rahul",
+            specialization: "Hair Specialist"
+        },
+
+        {
+            stylistId: 2,
+            stylistName: "Meena",
+            specialization: "Beauty Specialist"
+        },
+
+        {
+            stylistId: 3,
+            stylistName: "Sanjay",
+            specialization: "Color Specialist"
+        },
+
+        {
+            stylistId: 4,
+            stylistName: "Anitha",
+            specialization: "Bridal Specialist"
+        }
+
+    ];
+
+
+    /*
+    =====================================================
+    TIMES
+    =====================================================
+    */
+
+    const times = [
+
+        "10:00 AM",
+        "10:30 AM",
+        "11:00 AM",
+        "11:30 AM",
+
+        "12:00 PM",
+        "12:30 PM",
+        "01:00 PM",
+        "01:30 PM",
+
+        "02:00 PM",
+        "02:30 PM",
+        "03:00 PM",
+        "03:30 PM",
+
+        "04:00 PM",
+        "04:30 PM",
+        "05:00 PM",
+        "05:30 PM",
+
+        "06:00 PM"
+
+    ];
+
+
+    /*
+    =====================================================
+    START
+    =====================================================
+    */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            renderServices();
+
+            renderStylists();
+
+            renderTimes();
+
+            setMinimumDate();
+
+        }
+    );
+
+
+    /*
+    =====================================================
+    DATE
+    =====================================================
+    */
+
+    function setMinimumDate() {
+
+        const dateInput =
+            document.getElementById(
+                "appointmentDate"
+            );
+
+        const today =
+            new Date().toISOString().split("T")[0];
+
+        dateInput.min = today;
+
+    }
+
+
+    /*
+    =====================================================
+    SERVICES
+    =====================================================
+    */
+
+    function renderServices() {
+
+        const container =
+            document.getElementById(
+                "serviceCards"
+            );
+
+        container.innerHTML = "";
+
+        services.forEach(
+            function (service) {
+
+                const card =
+                    document.createElement("div");
+
+                card.className = "card";
+
+                card.innerHTML = `
+
+                    <div class="card-icon">
+                        ✂
+                    </div>
+
+                    <h3>
+                        ${service.serviceName}
+                    </h3>
+
+                    <p>
+                        Professional salon service
+                    </p>
+
+                    <div class="price">
+                        ₹${service.price}
+                    </div>
+
+                `;
+
+                card.onclick =
+                    function () {
+
+                        document
+                            .querySelectorAll(
+                                "#serviceCards .card"
+                            )
+                            .forEach(
+                                c =>
+                                    c.classList.remove(
+                                        "selected"
+                                    )
+                            );
+
+                        card.classList.add(
+                            "selected"
+                        );
+
+                        selectedService =
+                            service;
+
+                    };
+
+                container.appendChild(card);
+
+            }
+        );
+
+    }
+
+
+    /*
+    =====================================================
+    STYLISTS
+    =====================================================
+    */
+
+    function renderStylists() {
+
+        const container =
+            document.getElementById(
+                "stylistCards"
+            );
+
+        container.innerHTML = "";
+
+        stylists.forEach(
+            function (stylist) {
+
+                const card =
+                    document.createElement("div");
+
+                card.className = "card";
+
+                card.innerHTML = `
+
+                    <div class="card-icon">
+                        💇
+                    </div>
+
+                    <h3>
+                        ${stylist.stylistName}
+                    </h3>
+
+                    <p>
+                        ${stylist.specialization}
+                    </p>
+
+                `;
+
+                card.onclick =
+                    function () {
+
+                        document
+                            .querySelectorAll(
+                                "#stylistCards .card"
+                            )
+                            .forEach(
+                                c =>
+                                    c.classList.remove(
+                                        "selected"
+                                    )
+                            );
+
+                        card.classList.add(
+                            "selected"
+                        );
+
+                        selectedStylist =
+                            stylist;
+
+                    };
+
+                container.appendChild(card);
+
+            }
+        );
+
+    }
+
+
+    /*
+    =====================================================
+    TIMES
+    =====================================================
+    */
+
+    function renderTimes() {
+
+        const container =
+            document.getElementById(
+                "timeCards"
+            );
+
+        container.innerHTML = "";
+
+        times.forEach(
+            function (time) {
+
+                const button =
+                    document.createElement(
+                        "button"
+                    );
+
+                button.type = "button";
+
+                button.className = "time";
+
+                button.textContent = time;
+
+                button.onclick =
+                    function () {
+
+                        document
+                            .querySelectorAll(
+                                ".time"
+                            )
+                            .forEach(
+                                t =>
+                                    t.classList.remove(
+                                        "selected"
+                                    )
+                            );
+
+                        button.classList.add(
+                            "selected"
+                        );
+
+                        selectedTime = time;
+
+                    };
+
+                container.appendChild(
+                    button
+                );
+
+            }
+        );
+
+    }
+
+
+    /*
+    =====================================================
+    CUSTOMER
+    =====================================================
+    */
+
+    async function saveCustomerAndNext() {
+
+        const name = document
+            .getElementById("customerName")
+            .value
+            .trim();
+
+        const phone = document
+            .getElementById("phone")
+            .value
+            .trim();
+
+        const email = document
+            .getElementById("email")
+            .value
+            .trim();
+
+        const errorBox = document.getElementById("error1");
+
+        errorBox.style.display = "none";
+
+        // Validation
+        if (!name) {
+            showError(errorBox, "Please enter your name.");
+            return;
+        }
+
+        if (!phone) {
+            showError(errorBox, "Please enter your phone number.");
+            return;
+        }
+
+        try {
+
+            // Get all existing customers
+            const getResponse = await fetch(
+                API + "/customers"
+            );
+
+            if (!getResponse.ok) {
+                throw new Error(
+                    "Unable to load customers. HTTP " +
+                    getResponse.status
+                );
+            }
+
+            const customers = await getResponse.json();
+
+            console.log("Customers from database:", customers);
+
+            // Find customer using phone number
+            const existing = customers.find(
+                customer =>
+                    String(customer.phone ?? "").trim() === phone
+            );
+
+            if (existing) {
+
+                // Existing customer
+                customerId = existing.customerId;
+                customerName = existing.customerName;
+
+                console.log(
+                    "Existing customer:",
+                    customerId,
+                    customerName
+                );
+
+            } else {
+
+                // Create NEW customer
+                const createResponse = await fetch(
+                    API + "/customers",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            customerName: name,
+                            phone: phone,
+                            email: email
+                        })
+                    }
+                );
+
+                if (!createResponse.ok) {
+
+                    const message =
+                        await createResponse.text();
+
+                    throw new Error(
+                        message || "Unable to create customer."
+                    );
+                }
+
+                const newCustomer =
+                    await createResponse.json();
+
+                customerId =
+                    newCustomer.customerId;
+
+                customerName =
+                    newCustomer.customerName || name;
+
+                console.log(
+                    "New customer:",
+                    customerId,
+                    customerName
+                );
+            }
+
+            // Move to Service page
+            nextStep();
+
+        } catch (err) {
+
+            console.error(
+                "CUSTOMER ERROR:",
+                err
+            );
+
+            showError(
+                errorBox,
+                err.message ||
+                "Unable to save customer."
+            );
+        }
+    }
+
+
+    /*
+    =====================================================
+    SERVICE NEXT
+    =====================================================
+    */
+
+    function nextFromService() {
+
+        const error =
+            document.getElementById(
+                "error2"
+            );
+
+        if (!selectedService) {
+
+            showError(
+                error,
+                "Please select a service."
+            );
+
+            return;
+        }
+
+        nextStep();
+
+    }
+
+
+    /*
+    =====================================================
+    STYLIST NEXT
+    =====================================================
+    */
+
+    function nextFromStylist() {
+
+        const error =
+            document.getElementById(
+                "error3"
+            );
+
+        if (!selectedStylist) {
+
+            showError(
+                error,
+                "Please select a stylist."
+            );
+
+            return;
+        }
+
+        nextStep();
+
+    }
+
+
+    /*
+    =====================================================
+    DATE NEXT
+    =====================================================
+    */
+
+    function nextFromDate() {
+
+        const error =
+            document.getElementById(
+                "error4"
+            );
+
+        appointmentDate =
+            document
+                .getElementById(
+                    "appointmentDate"
+                )
+                .value;
+
+        if (!appointmentDate) {
+
+            showError(
+                error,
+                "Please select a date."
+            );
+
+            return;
+        }
+
+        nextStep();
+
+    }
+
+
+    /*
+    =====================================================
+    TIME TO SQL FORMAT
+    =====================================================
+    */
+
+    function convertTimeToSQL(time) {
+
+        const parts =
+            time.split(" ");
+
+        const hm =
+            parts[0];
+
+        const period =
+            parts[1];
+
+        let [hour, minute] =
+            hm.split(":")
+                .map(Number);
+
+
+        if (period === "PM" &&
+            hour !== 12) {
+
+            hour += 12;
+        }
+
+
+        if (period === "AM" &&
+            hour === 12) {
+
+            hour = 0;
+        }
+
+
+        return String(hour).padStart(2, "0")
+            + ":" +
+            String(minute).padStart(2, "0")
+            + ":00";
+
+    }
+
+
+    /*
+    =====================================================
+    CONFIRM BOOKING
+    =====================================================
+    */
+
+    async function confirmBooking() {
+
+        const error =
+            document.getElementById(
+                "error5"
+            );
+
+        error.style.display = "none";
+
+
+        if (!customerId) {
+
+            showError(
+                error,
+                "Customer details are missing."
+            );
+
+            return;
+        }
+
+
+        if (!selectedService) {
+
+            showError(
+                error,
+                "Please select a service."
+            );
+
+            return;
+        }
+
+
+        if (!selectedStylist) {
+
+            showError(
+                error,
+                "Please select a stylist."
+            );
+
+            return;
+        }
+
+
+        if (!appointmentDate) {
+
+            showError(
+                error,
+                "Please select a date."
+            );
+
+            return;
+        }
+
+
+        if (!selectedTime) {
+
+            showError(
+                error,
+                "Please select a time."
+            );
+
+            return;
+        }
+
+
+        const appointmentTime =
+            convertTimeToSQL(
+                selectedTime
+            );
+
+
+        /*
+         * EXACT DATA SENT TO SPRING BOOT
+         */
+
+        const appointment = {
+
+            customerId:
+                Number(customerId),
+
+            stylistId:
+                Number(
+                    selectedStylist.stylistId
+                ),
+
+            serviceId:
+                Number(
+                    selectedService.serviceId
+                ),
+
+            appointmentDate:
+            appointmentDate,
+
+            appointmentTime:
+            appointmentTime
+
+        };
+
+
+        console.log(
+            "Sending appointment:",
+            appointment
+        );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    API + "/appointments",
+                    {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(
+                                appointment
+                            )
+
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                const message =
+                    await response.text();
+
+                throw new Error(
+                    message ||
+                    "Unable to create appointment."
+                );
+            }
+
+
+            const savedAppointment =
+                await response.json();
+
+
+            showSuccess(
+                savedAppointment
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "BOOKING ERROR:",
+                error
+            );
+
+            showError(
+                error,
+                error.message ||
+                "Failed to create appointment."
+            );
+
+        }
+
+    }
+
+
+    /*
+    =====================================================
+    SUCCESS
+    =====================================================
+    */
+
+    function showSuccess(appointment) {
+
+        document
+            .querySelectorAll(".step")
+            .forEach(step => {
+                step.classList.remove("active");
+            });
+
+        document
+            .getElementById("successStep")
+            .classList.add("active");
+
+        const box =
+            document.getElementById("successBox");
+
+        box.style.display = "block";
+
+        box.innerHTML = `
+
+        <p>
+            <strong>
+                Customer:
+            </strong>
+            ${escapeHTML(customerName)}
+        </p>
+
+        <p>
+            <strong>
+                Customer ID:
+            </strong>
+            ${customerId}
+        </p>
+
+        <p>
+            <strong>
+                Service:
+            </strong>
+            ${escapeHTML(
+            selectedService.serviceName
+        )}
+        </p>
+
+        <p>
+            <strong>
+                Stylist:
+            </strong>
+            ${escapeHTML(
+            selectedStylist.stylistName
+        )}
+        </p>
+
+        <p>
+            <strong>
+                Date:
+            </strong>
+            ${appointmentDate}
+        </p>
+
+        <p>
+            <strong>
+                Time:
+            </strong>
+            ${selectedTime}
+        </p>
+
+        <p>
+            <strong>
+                Amount:
+            </strong>
+            ₹${Number(
+            selectedService.price
+        ).toLocaleString("en-IN")}
+        </p>
+
+        <p>
+            <strong>
+                Appointment ID:
+            </strong>
+            ${appointment.appointmentId || "Saved"}
+        </p>
+
+
+    }
+
+    /*
+    =====================================================
+    NAVIGATION
+    =====================================================
+    */
+
+    function nextStep() {
+
+        document
+            .getElementById(
+                "step" + currentStep
+            )
+            .classList.remove(
+            "active"
+        );
+
+        currentStep++;
+
+        document
+            .getElementById(
+                "step" + currentStep
+            )
+            .classList.add(
+            "active"
+        );
+
+        window.scrollTo(
+            0,
+            0
+        );
+
+    }
+
+
+    function previousStep() {
+
+        document
+            .getElementById(
+                "step" + currentStep
+            )
+            .classList.remove(
+            "active"
+        );
+
+        currentStep--;
+
+        document
+            .getElementById(
+                "step" + currentStep
+            )
+            .classList.add(
+            "active"
+        );
+
+        window.scrollTo(
+            0,
+            0
+        );
+
+    }
+
+
+    /*
+    =====================================================
+    ERROR
+    =====================================================
+    */
+
+    function showError(
+        element,
+        message
+    ) {
+
+        element.textContent =
+            message;
+
+        element.style.display =
+            "block";
+
+    }
+
+</script>
+
+</body>
+</html>
